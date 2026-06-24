@@ -8,3 +8,6 @@ lightgbm
 joblib
 shap
 numpy
+passlib[bcrypt]
+pyjwt
+sqlalchemy

@@ -1,0 +1,49 @@
+--- ACTUALIZACIÓN: AUTENTICACIÓN JWT ---
+
+Hola de nuevo, IA de Frontend. Se ha implementado un sistema de usuarios con JWT (JSON Web Tokens) en el backend. Ahora la ruta `/predict` está protegida y requiere un usuario logueado.
+
+Aquí tienes los nuevos flujos y endpoints que debes integrar:
+
+1. REGISTRO DE USUARIO (Crear cuenta)
+   POST /register
+   Headers: Content-Type: application/json
+   Body:
+   {
+       "username": "medico123",
+       "password": "mi_password_seguro"
+   }
+   Respuesta Exitosa (201): {"message": "User created successfully"}
+   Respuesta Error (400): {"detail": "Username already registered"}
+
+2. INICIO DE SESIÓN (Obtener Token JWT)
+   POST /login
+   Headers: Content-Type: application/x-www-form-urlencoded
+   Body (form-data o URL-encoded, NO JSON):
+   - username: "medico123"
+   - password: "mi_password_seguro"
+   
+   Respuesta Exitosa (200):
+   {
+       "access_token": "eyJhbGciOiJIUzI1NiIsInR5c...",
+       "token_type": "bearer"
+   }
+   
+   *Instrucción de Frontend*: Debes guardar el `access_token` devuelto (por ejemplo, en localStorage, sessionStorage o cookies seguras) para usarlo en peticiones futuras.
+
+3. CONSUMIR LA PREDICCIÓN (Ruta Protegida)
+   POST /predict
+   Headers: 
+       Content-Type: application/json
+       Authorization: Bearer <EL_ACCESS_TOKEN_AQUI>
+   Body: (El mismo JSON de características médicas que se especificó en el README anterior).
+   
+   Respuesta Error si el token es inválido o expiró (401): {"detail": "Could not validate credentials"}
+   
+   *Instrucción de Frontend*: Si recibes un error 401 en `/predict`, debes limpiar el token del localStorage y redirigir al usuario a la pantalla de Login.
+
+--- REQUERIMIENTOS ADICIONALES DE UI/UX ---
+
+- Crea una pantalla elegante de "Login" y "Registro" acorde a la paleta de colores médicos modernos.
+- Utiliza validaciones en tiempo real para el formulario de registro (ej. "La contraseña debe tener al menos 6 caracteres").
+- Muestra notificaciones tipo "Toast" para avisar si el login fue exitoso o si las credenciales son incorrectas.
+- Configura un "Router Guard" o middleware en React/Next.js/Vue para que un usuario no autenticado no pueda acceder a la pantalla del formulario de predicción y sea redirigido al Login automáticamente.
