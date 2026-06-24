@@ -11,3 +11,4 @@ numpy
 passlib[bcrypt]
 pyjwt
 sqlalchemy
+python-multipart
